@@ -4,7 +4,6 @@ import { ResponseApi } from 'src/app/model/response-api';
 import { DialogService } from 'src/app/services/dialog.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { UserService } from 'src/app/services/user.service';
-import { ResponseApi } from '../../model/response-api';
 
 @Component({
   selector: 'app-user-list',
@@ -47,32 +46,30 @@ export class UserListComponent implements OnInit {
   }
 
 
-  edit(id:string){
+  edit(id: string) {
     this.router.navigate(['/user-new', id]);
   }
 
-  delete(id:string){
+  delete(id: string) {
     this.dialogService.confirm('Do you want to delete the user?')
-    .then((canDelete:boolean) => {
-      if(canDelete){
-        this.message={};
-        this.userService.delete(id).subscribe((responseApi:ResponseApi) => {
-          this.showMessage({
-            type: 'success',
-            text: `User deleted`
+      .then((canDelete: boolean) => {
+        if (canDelete) {
+          this.message = {};
+          this.userService.delete(id).subscribe((responseApi: ResponseApi) => {
+            this.showMessage({
+              type: 'success',
+              text: `User deleted`
+            });
+            this.findAll(this.page, this.count);
+          }, err => {
+            this.showMessage({
+              type: 'error',
+              text: err['error']['errors'][0]
+            });
           });
-          this.findAll(this.page, this.count);
-        }, err => {
-          this.showMessage({
-            type: 'error',
-            text: err['error']['errors'][0]
-          });
-        });
-      }
-    });
+        }
+      });
   }
-
-
 
   private showMessage(message: { type: string, text: string }): void {
     this.message = message;
