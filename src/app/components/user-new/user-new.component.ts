@@ -47,7 +47,6 @@ export class UserNewComponent implements OnInit {
     });
   }
 
-
   register(){
     this.message = {};
     this.userService.createOrUpdate(this.user).subscribe((responseApi: ResponseApi) => {
@@ -88,6 +87,4 @@ export class UserNewComponent implements OnInit {
       'has-success': !isInvalid && !isDirty
     };
   }
-
-
 }

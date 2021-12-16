@@ -13,7 +13,4 @@ export class Ticket {
         public data: string,
         public changes: Array<string>
     ){}
-
-
-
 }
