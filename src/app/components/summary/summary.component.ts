@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ResponseApi } from 'src/app/model/response-api';
+import { Summary } from 'src/app/model/summary.model';
+import { TicketService } from 'src/app/services/ticket.service';
 
 @Component({
   selector: 'app-summary',
@@ -7,9 +10,38 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SummaryComponent implements OnInit {
 
-  constructor() { }
+  summary: Summary = new Summary();
+  message: {};
+  classCss: {};
+
+  constructor(
+    private ticketService : TicketService
+  ) { }
 
   ngOnInit() {
+    this.ticketService.summary().subscribe((responseApi: ResponseApi) => {
+    this.summary = responseApi.data;
+    }, err => {
+      this.showMessage({
+        type: 'error',
+        text: err['error']['errors'][0]
+      });
+    });
+  }
+
+  private showMessage(message: { type: string, text: string }): void {
+    this.message = message;
+    this.buildClasses(message.type);
+    setTimeout(() => {
+      this.message = undefined;
+    }, 3000);
+  }
+
+  private buildClasses(type: string): void {
+    this.classCss = {
+      'alert': true
+    }
+    this.classCss['alert-' + type] = true;
   }
 
 }
